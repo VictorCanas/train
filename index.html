@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+
+<html lang="en-us">
+
+  <head>
+
+    <meta charset="UTF-8">
+    <title>Train Scheduler</title>
+
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Bootstrap CDN-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- Firebase Reference -->
+    <script src="https://www.gstatic.com/firebasejs/4.7.0/firebase.js"></script>
+
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <br>
+
+      <!-- Jumbotron Title -->
+      <div class="jumbotron">
+        <h1 class="text-center">Anytime is train time </h1>
+        <h4 class="text-center">Choo Choo. Chee Chee.</h4>
+      </div>
+
+       <div class="row">
+        <div class="col-lg-12">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Current Train Schedule</h3>
+            </div>
+            <div class="container">                                                
+         <div class="table-responsive">          
+  <table class="table"> 
+    <thead>
+      <tr>
+        <th>Train Name</th>
+        <th>Destination</th>
+        <th>Frequency</th>
+        <th>Next Arrival</th>
+        <th>Minutes Away</th>
+        <div id="full-member-list"></div>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>Anna</td>
+        <td>Pitt</td>
+        <td>35</td>
+        <td>New York</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+          </div>
+        </div>
+
+      </div>
+
+
+
+      <!-- Make Your Bid -->
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Add Train</h3>
+            </div>
+            <div class="panel-body">
+              <form>
+                <div class="form-group">
+                  <label for="bidder-name">Train name</label>
+                  <input class="form-control" id="employee-name" type="text">
+                </div>
+                <div class="form-group">
+                  <label for="bidder-price">Role</label>
+                  <input class="form-control" id="role" type="text">
+                </div>
+                <div class="form-group">
+                  <label for="bidder-price">First Train Time (HH:mm - military time)</label>
+                  <input class="form-control" id="start-date" type="date">
+                </div>
+                <div class="form-group">
+                  <label for="bidder-price">Frequency (min)</label>
+                  <input class="form-control" id="montly-rate" type="number">
+                </div>
+                <button class="btn btn-primary" id="submit-bid" type="submit">Submit</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- JavaScript -->
+    <script src="logic.js"></script>
+
+  </body>
+
+</html>
