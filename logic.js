@@ -5,6 +5,10 @@
 
 // Assign the reference to the database to a variable named 'database'
 //var database = ...
+
+$(document).ready(function() {
+
+
 var config = {
     apiKey: "AIzaSyAB5zRBKOqOaP0g4HKgR94tVG4B9_dzb7A",
     authDomain: "proejct-15960.firebaseapp.com",
@@ -13,137 +17,76 @@ var config = {
     storageBucket: "proejct-15960.appspot.com",
     messagingSenderId: "957116997644"
   };
-
-firebase.initializeApp(config);
-
-var database = firebase.database();
+ 
+  firebase.initializeApp(config);
 
 
-// // Initial Values
-// var initialBid = 0;
-// var initialBidder = "No one :-(";
-// var highPrice = initialBid;
-// var highBidder = initialBidder;
 
-// --------------------------------------------------------------
-
-// // At the initial load and subsequent value changes, get a snapshot of the stored data.
-// // This function allows you to update your page in real-time when the firebase database changes.
-// database.ref().on("value", function(snapshot) {
-
-//   // If Firebase has a highPrice and highBidder stored (first case)
-//   if (snapshot.child("highBidder").exists() && snapshot.child("highPrice").exists()) {
-
-//     // Set the variables for highBidder/highPrice equal to the stored values in firebase.
-//     // highPrice = ...
-//     // highBidder = ...
-//     highBidder = snapshot.val().highBidder;
-//     highPrice = snapshot.val().highPrice;
+  var database = firebase.database();
 
 
-//     // Change the HTML to reflect the stored values
-//     $("#highest-bidder").text(snapshot.val().highBidder);
-//     $("#highest-price").text(snapshot.val().highPrice);
-
-//     // Print the data to the console.
-//     console.log(highBidder);
-//     console.log(highPrice);
-
-
-//   }
-
-//   // Else Firebase doesn't have a highPrice/highBidder, so use the initial local values.
-//   else {
-
-//     // Change the HTML to reflect the initial values
-//     $("#highest-price").text("Victor");
-//     $("#highest-bidder").text("0");
-
-//     // Print the data to the console.
-
-
-//   }
-
-
-// // If any errors are experienced, log them to console.
-// }, function(errorObject) {
-//   console.log("The read failed: " + errorObject.code);
-// });
-
-// --------------------------------------------------------------
-
-// Whenever a user clicks the submit-bid button
-$("#submit-bid").on("click", function(event) {
-  // Prevent form from submitting
+  $("body").on("click", "#submit-id" , function(event) {
+  
   event.preventDefault();
 
   // Get the input values
-  var employeeName = $( "#employee-name" ).val();
-  var role = $( "#role" ).val();
-  var startDate = $( "#start-date" ).val();
-  var monthlyRate = $( "#montly-rate" ).val();
+  var trainName = $( "#trainNameId" ).val().trim();
+  var destId = $( "#destId" ).val().trim();
+  var firstTrainTime = $("#firstTrainId").val().trim();
+  var freqId = $( "#freqId" ).val().trim();
 
-    // Alert
-    alert("Your information has been succesfully added.");
 
-    // Save the new price in Firebase
+  // Moment JS
+  var firstTimeConverted = moment(firstTrainTime, "hh:mm A").subtract(10, "years");
+  var timeRemainder = moment().diff(moment(firstTimeConverted), "minutes") % freqId;
+  var minutesAway = freqId - timeRemainder;
+  var nextTrain = moment().add(minutesAway, "minutes").format("hh:mm A");
+  
+  
+    
     database.ref().push(
+
   {
-    employeeName: employeeName,
-    role: role,
-    startDate: startDate,
-    monthlyRate: monthlyRate,
-    dateAdded: firebase.database.ServerValue.TIMESTAMP
+    trainName: trainName,
+    destination: destId,
+    firstTrainTime: firstTrainTime,
+    frequency: freqId,
+    Arrival: nextTrain,
+    minutesAway: minutesAway,
   });
 
-    // Log the new High Price
-
-    console.log(employeeName);
-
+  
 
     database.ref().on("child_added", function(childSnapshot) {
 
-      // Log everything that's coming out of snapshot
-      console.log(childSnapshot.val().employeeName);
-      console.log(childSnapshot.val().role);
-      console.log(childSnapshot.val().startDate);
-      console.log(childSnapshot.val().monthlyRate);
+
+      var fireTrainName  = childSnapshot.val().trainName;
+      var Firedest   = childSnapshot.val().destination;
+      var fireArrival  = childSnapshot.val().Arrival;
+      var fireFreq  = childSnapshot.val().frequency;
 
 
-      // full list of items to the well
-      $("#full-member-list").append("<div class='well'><span id='name'> " + childSnapshot.val().employeeName +
-        " </span><span id='email'> " + childSnapshot.val().role +
-        " </span><span id='age'> " + childSnapshot.val().startDate +
-        " </span><span id='comment'> " + childSnapshot.val().monthlyRate + " </span></div>");
 
-    // Handle the errors
-    }, function(errorObject) {
-      console.log("Errors handled: " + errorObject.code);
-    });
+      // Appending data to the table
+      $(".table").append("<tr><td> " + childSnapshot.val().trainName +
+        " </td><td> " + childSnapshot.val().destination +
+        " </td><td> " + childSnapshot.val().frequency +
+        " </td><td> " + childSnapshot.val().Arrival + "</td><td> " + childSnapshot.val().minutesAway + "</td></tr>");
 
-    dataRef.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function(snapshot) {
-
-      // Change the HTML to reflect
-      $("#name-display").text(snapshot.val().name);
-      $("#email-display").text(snapshot.val().email);
-      $("#age-display").text(snapshot.val().age);
-      $("#comment-display").text(snapshot.val().comment);
-    });
+    
+    })
 
 
-    // dataRef.ref().on("child_added", function(childSnapshot)) {
+
+  $( "#trainNameId" ).val("");
+  $( "#destId" ).val("");
+  $( "#firstTrainId" ).val("");
+  $( "#freqId" ).val("");
+
+ 
 
 
-    // });
-    // $("#highest-bidder").text(snapshot.val().employeeName);
-    // $("#highest-price").text(snapshot.val().role);
-    // $("#highest-price").text(snapshot.val().role);
+})
 
-
-    // Store the new high price and bidder name as a local variable
-
-    // // Change the HTML to reflect the new high price and bidder
-    // $("#highest-bidder").text(snapshot.val().highBidder);
-    // $("#highest-price").text(snapshot.val().highPrice);
 
 });
